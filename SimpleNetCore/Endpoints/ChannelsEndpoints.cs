@@ -25,15 +25,10 @@ public static class ChannelsEndpoints
         // Создаёт канал
         channels.MapPost("/", (ChannelRequest request) =>
         {
-            // Валидация данных
-            if (!MiniValidator.TryValidate(request, out var errors))
-            {
-                return Results.ValidationProblem(errors);
-            }
 
             ChannelDto newChannel = new ChannelDto
             {
-                ChannelName = request.ChannelName,
+                ChannelName = request.ChannelName
             };
 
             Channels.Add(newChannel);
