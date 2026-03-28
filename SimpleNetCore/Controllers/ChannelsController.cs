@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleNetCore.DTO.Channel;
+using SimpleNetCore.Services;
+using System.Reflection.Metadata.Ecma335;
 
 namespace SimpleNetCore.Controllers;
 
@@ -9,34 +11,44 @@ namespace SimpleNetCore.Controllers;
 [Route("a/channels")]
 public class ChannelsController : ControllerBase
 {
-    private List<ChannelDto> Channels;
+    ChannelService channelService;
 
-    ChannelsController(List<ChannelDto> Channels)
+    public ChannelsController(ChannelService channelService)
     {
-        this.Channels = Channels;
+        this.channelService = channelService;
     }
-
 
 
     [HttpGet]
     public IActionResult GetAll()
-    {
-        var summary = Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName));
-        return Ok(summary);
+    {   // channel summary
+        return Ok(channelService.GetChannelSummary());
     }
 
     [HttpPost]
     public IActionResult Create(ChannelRequest request)
-    {
-        ChannelDto newChannel = new ChannelDto
-        {
-            ChannelName = request.ChannelName,
-        };
-
-        Channels.Add(newChannel);
+    {   // adds a channel to data
+        var newChannel = channelService.AddChannel(request);
 
         return Created($"a/channels/{newChannel.ChannelId}", newChannel);
     }
 
-}
+    [HttpPut("{ChannelId:guid}")]
+    public IActionResult Update(Guid ChannelId, ChannelRequest request)
+    {
+        if (channelService.EditChannel(ChannelId, request)){
+            return Ok();
+        }
+        return NotFound();
+    }
 
+
+    
+
+
+
+
+
+
+
+}

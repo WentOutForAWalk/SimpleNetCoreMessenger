@@ -16,43 +16,17 @@ public static class ChannelsEndpoints
 
         var channels = api.MapGroup("channels");
 
-        // Выводит сводку каналов
-        channels.MapGet("/", () =>
-        Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName))
-        );
-
-
-        // Создаёт канал
-        channels.MapPost("/", (ChannelRequest request) =>
-        {
-
-            ChannelDto newChannel = new ChannelDto
-            {
-                ChannelName = request.ChannelName
-            };
-
-            Channels.Add(newChannel);
-
-            return Results.Created($"/channels/{newChannel.ChannelId}", newChannel);
-        });
-
 
         // Редактирует канал
-        channels.MapPut("/{id:guid}", (Guid id, ChannelRequest request) =>
-        {
-            // Валидация данных
-            if (!MiniValidator.TryValidate(request, out var errors))
-            {
-                return Results.ValidationProblem(errors);
-            }
+        //channels.MapPut("/{id:guid}", (Guid id, ChannelRequest request) =>
+        //{
+        //    if (Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
+        //        return Results.NotFound();
 
-            if (Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
-                return Results.NotFound();
+        //    channel.ChannelName = request.ChannelName;
 
-            channel.ChannelName = request.ChannelName;
-
-            return Results.Ok();
-        });
+        //    return Results.Ok();
+        //});
 
 
         // Удаляет канал
