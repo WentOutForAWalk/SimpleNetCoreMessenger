@@ -11,6 +11,12 @@ public class ChannelService
         this.Storage = Storage;
     }
 
+    public IEnumerable<ChannelSummary> GetChannelSummary()
+    {
+        return (Storage.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName)));
+    }
+
+
     // Adds a Channel in memory storage <temporary solution>
     public ChannelDto AddChannel(ChannelRequest request)
     {
@@ -24,11 +30,6 @@ public class ChannelService
         return newChannel;
     }
 
-    public IEnumerable<ChannelSummary> GetChannelSummary()
-    {
-        return (Storage.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName)));
-    }
-
     public bool EditChannel(Guid id, ChannelRequest request)
     {
         if (Storage.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
@@ -37,5 +38,16 @@ public class ChannelService
         channel.ChannelName = request.ChannelName;
         return true;
     }
+
+    public bool DeleteChannel(Guid id)
+    {
+        if (Storage.Channels.FindIndex(c => c.ChannelId == id) is var index and not -1)
+        {
+            Storage.Channels.RemoveAt(index);
+            return true;
+        }
+        return false;
+    }
+
 
 }

@@ -17,28 +17,17 @@ public static class ChannelsEndpoints
         var channels = api.MapGroup("channels");
 
 
-        // Редактирует канал
-        //channels.MapPut("/{id:guid}", (Guid id, ChannelRequest request) =>
-        //{
-        //    if (Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
-        //        return Results.NotFound();
-
-        //    channel.ChannelName = request.ChannelName;
-
-        //    return Results.Ok();
-        //});
-
 
         // Удаляет канал
-        channels.MapDelete("/{id:guid}", (Guid id) =>
-        {
-            if (Channels.FindIndex(c => c.ChannelId == id) is var index and not -1)
-            {
-                Channels.RemoveAt(index);
-                return Results.Ok();
-            }
-            return Results.NotFound();
-        });
+        //channels.MapDelete("/{id:guid}", (Guid id) =>
+        //{
+        //    if (Channels.FindIndex(c => c.ChannelId == id) is var index and not -1)
+        //    {
+        //        Channels.RemoveAt(index);
+        //        return Results.Ok();
+        //    }
+        //    return Results.NotFound();
+        //});
         
         
         
