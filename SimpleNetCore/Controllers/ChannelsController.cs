@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleNetCore.DTO.Channel;
+using SimpleNetCore.Services;
 
 namespace SimpleNetCore.Controllers;
 
@@ -9,34 +10,55 @@ namespace SimpleNetCore.Controllers;
 [Route("a/channels")]
 public class ChannelsController : ControllerBase
 {
-    private List<ChannelDto> Channels;
+    ChannelService channelService;
 
-    ChannelsController(List<ChannelDto> Channels)
+    public ChannelsController(ChannelService channelService)
     {
-        this.Channels = Channels;
+        this.channelService = channelService;
     }
-
 
 
     [HttpGet]
-    public IActionResult GetAll()
-    {
-        var summary = Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName));
-        return Ok(summary);
+    public IActionResult Read()
+    {   // channel summary
+        return Ok(channelService.GetChannelSummary());
     }
 
-    [HttpPost]
-    public IActionResult Create(ChannelRequest request)
-    {
-        ChannelDto newChannel = new ChannelDto
-        {
-            ChannelName = request.ChannelName,
-        };
 
-        Channels.Add(newChannel);
+    [HttpPost]
+    public IActionResult Create([FromBody] ChannelRequest request)
+    {
+        var newChannel = channelService.AddChannel(request);
 
         return Created($"a/channels/{newChannel.ChannelId}", newChannel);
     }
 
-}
 
+    [HttpPut("{сhannelId:guid}")]
+    public IActionResult Update(Guid сhannelId, [FromBody] ChannelRequest request)
+    {
+        if (channelService.EditChannel(сhannelId, request))
+        {
+            return NoContent();
+        }
+        return NotFound();
+    }
+
+
+    [HttpDelete("{сhannelId:guid}")]
+    public IActionResult Delete(Guid сhannelId) {
+        if (channelService.DeleteChannel(сhannelId))
+        {
+            return NoContent();
+        }
+        return NotFound();
+    }
+    
+
+
+
+
+
+
+
+}
