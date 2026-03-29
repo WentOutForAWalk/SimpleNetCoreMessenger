@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SimpleNetCore.Models;
+using Backend.API.Models;
 
-namespace SimpleNetCore.Data;
+namespace Backend.API.Data;
 public class DataContext(DbContextOptions<DataContext> options)
     : DbContext(options)
 {

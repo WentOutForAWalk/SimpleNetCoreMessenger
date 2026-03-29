@@ -1,5 +1,5 @@
-using SimpleNetCore.Data;
-using SimpleNetCore.Services;
+using Backend.API.Data;
+using Backend.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,14 +8,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Services
-builder.Services.AddSingleton<MemoryStorageService>();
 builder.Services.AddTransient<ChannelService>();
 builder.Services.AddTransient<MessageService>();
 
 // Controllers
 builder.Services.AddControllers();
 
-builder.AddSimpleNetCoreDb();
+builder.BackendDb();
 
 var app = builder.Build();
 

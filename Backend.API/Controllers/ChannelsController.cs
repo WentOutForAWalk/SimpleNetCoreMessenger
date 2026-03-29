@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SimpleNetCore.DTO.Channel;
-using SimpleNetCore.Services;
+using Backend.API.DTO.Channel;
+using Backend.API.Services;
 
-namespace SimpleNetCore.Controllers;
+namespace Backend.API.Controllers;
 
 
 

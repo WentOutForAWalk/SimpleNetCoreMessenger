@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SimpleNetCore.DTO.Message;
+namespace Backend.API.DTO.Message;
 
 
 public record CreateMessageRequest(

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SimpleNetCore.DTO.Channel;
+namespace Backend.API.DTO.Channel;
 
 public record ChannelRequest(
     [Required][StringLength(22)] string ChannelName

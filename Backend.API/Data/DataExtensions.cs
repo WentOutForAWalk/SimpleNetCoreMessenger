@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SimpleNetCore.Models;
+using Backend.API.Models;
 
-namespace SimpleNetCore.Data;
+namespace Backend.API.Data;
 public static class DataExtensions
 {
     public static void MigrateDb(this WebApplication app)
@@ -12,9 +12,9 @@ public static class DataExtensions
     }
 
 
-    public static void AddSimpleNetCoreDb(this WebApplicationBuilder builder)
+    public static void BackendDb(this WebApplicationBuilder builder)
     {
-        var connString = builder.Configuration.GetConnectionString("SimpleNetCore");
+        var connString = builder.Configuration.GetConnectionString("Backend.API");
         builder.Services.AddSqlite<DataContext>(
             connString,
             optionsAction: options => options.UseSeeding((context, _) =>

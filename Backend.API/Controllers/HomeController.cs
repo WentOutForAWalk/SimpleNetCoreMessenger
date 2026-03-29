@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SimpleNetCore.Controllers;
+namespace Backend.API.Controllers;
 
 [ApiController]
 [Route("/")]

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SimpleNetCore.DTO.Message;
-using SimpleNetCore.Services;
+using Backend.API.DTO.Message;
+using Backend.API.Services;
 
-namespace SimpleNetCore.Controllers;
+namespace Backend.API.Controllers;
 
 
 

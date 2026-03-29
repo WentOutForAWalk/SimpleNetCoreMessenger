@@ -1,11 +1,12 @@
-﻿namespace SimpleNetCore.Models
+﻿namespace Backend.API.Models
 {
     public class Message
     {
         public Guid MessageId { get; set; } = Guid.NewGuid();
-        public required string SenderName { get; set; }
-        public required string Text { get; set; }
+        public string? SenderName { get; set; }
+        public string? Text { get; set; }
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
 
+        public Guid ChannelId { get; set; }
     }
 }

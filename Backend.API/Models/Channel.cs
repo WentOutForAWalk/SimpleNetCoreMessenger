@@ -1,4 +1,4 @@
-﻿namespace SimpleNetCore.Models
+﻿namespace Backend.API.Models
 {
     public class Channel
     {

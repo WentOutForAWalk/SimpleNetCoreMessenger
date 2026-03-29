@@ -1,16 +1,14 @@
-﻿using SimpleNetCore.Data;
-using SimpleNetCore.DTO.Channel;
-using SimpleNetCore.Models;
+﻿using Backend.API.Data;
+using Backend.API.DTO.Channel;
+using Backend.API.Models;
 
-namespace SimpleNetCore.Services;
+namespace Backend.API.Services;
 
 public class ChannelService
 {
-    private readonly MemoryStorageService _storage;
     private readonly DataContext _context;
-    public ChannelService(MemoryStorageService storage, DataContext context)
+    public ChannelService(DataContext context)
     {
-        _storage = storage;
         _context = context;
     }
 
@@ -18,9 +16,6 @@ public class ChannelService
     {
         return (_context.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName)));
     }
-
-
-    // Adds a Channel in memory storage <temporary solution>
     public Channel AddChannel(ChannelRequest request)
     {
         Channel newChannel = new Channel
@@ -34,7 +29,6 @@ public class ChannelService
 
         return newChannel;
     }
-
     public bool EditChannel(Guid id, ChannelRequest request)
     {
         if (_context.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
@@ -44,7 +38,6 @@ public class ChannelService
         _context.SaveChanges();
         return true;
     }
-
     public bool DeleteChannel(Guid id)
     {
         if (_context.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
