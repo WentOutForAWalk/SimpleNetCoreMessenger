@@ -30,7 +30,7 @@ public class ChannelsController : ControllerBase
     {
         var newChannel = channelService.AddChannel(request);
 
-        return Created(String.Empty, newChannel);
+        return Created($"a/channels/{newChannel.ChannelId}", newChannel);
     }
 
 

@@ -1,5 +1,4 @@
 using SimpleNetCore.Data;
-using SimpleNetCore.Endpoints;
 using SimpleNetCore.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,16 +22,11 @@ var app = builder.Build();
 app.MapControllers();
 
 
-
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
-app.MapChannelsEndpoints();
 
 app.MigrateDb();
 

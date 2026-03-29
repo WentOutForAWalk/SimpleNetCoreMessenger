@@ -4,16 +4,15 @@ namespace SimpleNetCore.Services;
 
 public class ChannelService
 {
-    private readonly MemoryStorageService Storage;
-
-    public ChannelService(MemoryStorageService Storage)
+    private readonly MemoryStorageService _storage;
+    public ChannelService(MemoryStorageService storage)
     {
-        this.Storage = Storage;
+        _storage = storage;
     }
 
     public IEnumerable<ChannelSummary> GetChannelSummary()
     {
-        return (Storage.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName)));
+        return (_storage.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName)));
     }
 
 
@@ -25,14 +24,14 @@ public class ChannelService
             ChannelName = request.ChannelName
         };
 
-        Storage.Channels.Add(newChannel);
+        _storage.Channels.Add(newChannel);
         
         return newChannel;
     }
 
     public bool EditChannel(Guid id, ChannelRequest request)
     {
-        if (Storage.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
+        if (_storage.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
             return false;
 
         channel.ChannelName = request.ChannelName;
@@ -41,9 +40,9 @@ public class ChannelService
 
     public bool DeleteChannel(Guid id)
     {
-        if (Storage.Channels.FindIndex(c => c.ChannelId == id) is var index and not -1)
+        if (_storage.Channels.FindIndex(c => c.ChannelId == id) is var index and not -1)
         {
-            Storage.Channels.RemoveAt(index);
+            _storage.Channels.RemoveAt(index);
             return true;
         }
         return false;
