@@ -7,7 +7,7 @@ public static class DataExtensions
     public static void MigrateDb(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<SimpleNetCoreContext>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
         dbContext.Database.Migrate();
     }
 
@@ -15,7 +15,7 @@ public static class DataExtensions
     public static void AddSimpleNetCoreDb(this WebApplicationBuilder builder)
     {
         var connString = builder.Configuration.GetConnectionString("SimpleNetCore");
-        builder.Services.AddSqlite<SimpleNetCoreContext>(
+        builder.Services.AddSqlite<DataContext>(
             connString,
             optionsAction: options => options.UseSeeding((context, _) =>
             {

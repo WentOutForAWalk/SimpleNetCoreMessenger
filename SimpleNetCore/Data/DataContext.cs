@@ -2,7 +2,7 @@
 using SimpleNetCore.Models;
 
 namespace SimpleNetCore.Data;
-public class SimpleNetCoreContext(DbContextOptions<SimpleNetCoreContext> options)
+public class DataContext(DbContextOptions<DataContext> options)
     : DbContext(options)
 {
     public DbSet<Channel> Channels => Set<Channel>();
@@ -10,3 +10,4 @@ public class SimpleNetCoreContext(DbContextOptions<SimpleNetCoreContext> options
     public DbSet<Message> Messages => Set<Message>();
 }
 
+    

@@ -1,51 +1,61 @@
-﻿using SimpleNetCore.DTO.Channel;
+﻿using SimpleNetCore.Data;
+using SimpleNetCore.DTO.Channel;
+using SimpleNetCore.Models;
 
 namespace SimpleNetCore.Services;
 
 public class ChannelService
 {
     private readonly MemoryStorageService _storage;
-    public ChannelService(MemoryStorageService storage)
+    private readonly DataContext _context;
+    public ChannelService(MemoryStorageService storage, DataContext context)
     {
         _storage = storage;
+        _context = context;
     }
 
     public IEnumerable<ChannelSummary> GetChannelSummary()
     {
-        return (_storage.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName)));
+        return (_context.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName)));
     }
 
 
     // Adds a Channel in memory storage <temporary solution>
-    public ChannelDto AddChannel(ChannelRequest request)
+    public Channel AddChannel(ChannelRequest request)
     {
-        ChannelDto newChannel = new ChannelDto
+        Channel newChannel = new Channel
         {
             ChannelName = request.ChannelName
         };
 
-        _storage.Channels.Add(newChannel);
-        
+        _context.Channels.Add(newChannel);
+        _context.SaveChanges();
+
+
         return newChannel;
     }
 
     public bool EditChannel(Guid id, ChannelRequest request)
     {
-        if (_storage.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
+        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
             return false;
 
         channel.ChannelName = request.ChannelName;
+        _context.SaveChanges();
         return true;
     }
 
     public bool DeleteChannel(Guid id)
     {
-        if (_storage.Channels.FindIndex(c => c.ChannelId == id) is var index and not -1)
+        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
         {
-            _storage.Channels.RemoveAt(index);
-            return true;
+            return false;
         }
-        return false;
+
+        _context.Channels.Remove(channel);
+        _context.SaveChanges();
+
+        return true;
     }
 
 
