@@ -8,8 +8,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Services
-builder.Services.AddTransient<ChannelService>();
-builder.Services.AddTransient<MessageService>();
+builder.Services.AddScoped<ChannelService>();
+builder.Services.AddScoped<MessageService>();
 
 // Controllers
 builder.Services.AddControllers();
