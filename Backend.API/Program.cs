@@ -1,5 +1,6 @@
 using Backend.API.Data;
 using Backend.API.Services;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,13 +11,22 @@ builder.Services.AddSwaggerGen();
 // Services
 builder.Services.AddScoped<ChannelService>();
 builder.Services.AddScoped<MessageService>();
+builder.Services.AddScoped<AuthService>();
 
 // Controllers
 builder.Services.AddControllers();
 
 builder.BackendDb();
 
+// Identity
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<DataContext>();
+
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
