@@ -14,13 +14,14 @@ public class ChannelService
 
     public IEnumerable<ChannelSummary> GetChannelSummary()
     {
-        return (_context.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName)));
+        return (_context.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName, c.OwnerId)));
     }
-    public Channel AddChannel(ChannelRequest request)
+    public Channel AddChannel(ChannelRequest request, string userId)
     {
         Channel newChannel = new Channel
         {
-            ChannelName = request.ChannelName
+            ChannelName = request.ChannelName,
+            OwnerId = userId
         };
 
         _context.Channels.Add(newChannel);
@@ -33,7 +34,6 @@ public class ChannelService
     {
         if (_context.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
             return false;
-
         channel.ChannelName = request.ChannelName;
         _context.SaveChanges();
         return true;

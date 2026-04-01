@@ -2,6 +2,7 @@
 using Backend.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Backend.API.Controllers;
 
@@ -25,10 +26,13 @@ public class ChannelsController : ControllerBase
         return Ok(channelService.GetChannelSummary());
     }
 
+
     [HttpPost]
     public IActionResult Create([FromBody] ChannelRequest request)
     {
-        var newChannel = channelService.AddChannel(request);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var newChannel = channelService.AddChannel(request, userId);
         // [LOG]
         Console.WriteLine($"[LOG]: User<{User.Identity?.Name}> CREATE channel<{newChannel.ChannelName}> id<{newChannel.ChannelId}>");
         return Created($"a/channels/{newChannel.ChannelId}", newChannel);
