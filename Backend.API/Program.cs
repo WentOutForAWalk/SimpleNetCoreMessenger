@@ -23,6 +23,13 @@ builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<DataContext>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Name = "dotnet";
+});
+
+
+
 var app = builder.Build();
 
 app.UseAuthentication();

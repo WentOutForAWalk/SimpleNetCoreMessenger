@@ -1,8 +1,6 @@
 ﻿using Backend.API.DTO.Auth;
 using Backend.API.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 
 namespace Backend.API.Controllers;

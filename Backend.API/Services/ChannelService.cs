@@ -30,17 +30,18 @@ public class ChannelService
 
         return newChannel;
     }
-    public bool EditChannel(Guid id, ChannelRequest request)
+    public bool EditChannel(Guid id, ChannelRequest request, string userId)
     {
-        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
+        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id && c.OwnerId == userId) is not { } channel)
             return false;
+
         channel.ChannelName = request.ChannelName;
         _context.SaveChanges();
         return true;
     }
-    public bool DeleteChannel(Guid id)
+    public bool DeleteChannel(Guid id, string userId)
     {
-        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id) is not { } channel)
+        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id && c.OwnerId == userId) is not { } channel)
         {
             return false;
         }

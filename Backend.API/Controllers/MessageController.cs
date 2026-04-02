@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Backend.API.DTO.Message;
+﻿using Backend.API.DTO.Message;
 using Backend.API.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Backend.API.Controllers;
 
 
-
+[Authorize]
 [ApiController]
 [Route("a/channels/{channelId:guid}/messages")]
 public class MessageController : ControllerBase
@@ -32,7 +34,10 @@ public class MessageController : ControllerBase
     [HttpPost]
     public IActionResult Create(Guid channelId, CreateMessageRequest request)
     {
-        if (_messageService.AddMessage(channelId, request) is { } message)
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userName = User.Identity?.Name;
+
+        if (_messageService.AddMessage(channelId, request, userId, userName) is { } message)
         {
             return Created($"a/channels/{channelId}/messages/{message.MessageId}", message);
         }
@@ -43,7 +48,10 @@ public class MessageController : ControllerBase
     [HttpPut("{messageId:guid}")]
     public IActionResult Update(Guid channelId, Guid messageId, CreateMessageRequest request)
     {
-        if (_messageService.EditMessage(channelId, messageId, request))
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userName = User.Identity?.Name;
+
+        if (_messageService.EditMessage(userId, userName, channelId, messageId, request))
         {
             return Ok();
         }
@@ -54,7 +62,9 @@ public class MessageController : ControllerBase
     [HttpDelete("{messageId:guid}")]
     public IActionResult Delete(Guid channelId, Guid messageId)
     {
-        if (_messageService.RemoveMessage(channelId, messageId))
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (_messageService.RemoveMessage(channelId, messageId, userId))
         {
             return Ok();
         }

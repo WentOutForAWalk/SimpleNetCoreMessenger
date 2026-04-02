@@ -2,6 +2,7 @@
 {
     public class Message
     {
+        public string OwnerId { get; set; } = string.Empty;
         public Guid MessageId { get; set; } = Guid.NewGuid();
         public string? SenderName { get; set; }
         public string? Text { get; set; }

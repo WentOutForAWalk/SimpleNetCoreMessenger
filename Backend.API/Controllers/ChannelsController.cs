@@ -33,8 +33,6 @@ public class ChannelsController : ControllerBase
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var newChannel = channelService.AddChannel(request, userId);
-        // [LOG]
-        Console.WriteLine($"[LOG]: User<{User.Identity?.Name}> CREATE channel<{newChannel.ChannelName}> id<{newChannel.ChannelId}>");
         return Created($"a/channels/{newChannel.ChannelId}", newChannel);
     }
 
@@ -42,10 +40,10 @@ public class ChannelsController : ControllerBase
     [HttpPut("{сhannelId:guid}")]
     public IActionResult Update(Guid сhannelId, [FromBody] ChannelRequest request)
     {
-        if (channelService.EditChannel(сhannelId, request))
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (channelService.EditChannel(сhannelId, request, userId))
         {
-            // [LOG]
-            Console.WriteLine($"[LOG]: User<{User.Identity?.Name}> UPDATE channel by id<{сhannelId}>");
             return NoContent();
         }
         return NotFound();
@@ -53,10 +51,12 @@ public class ChannelsController : ControllerBase
 
 
     [HttpDelete("{сhannelId:guid}")]
-    public IActionResult Delete(Guid сhannelId) {
-        if (channelService.DeleteChannel(сhannelId))
+    public IActionResult Delete(Guid сhannelId) 
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (channelService.DeleteChannel(сhannelId, userId))
         {
-            Console.WriteLine($"[LOG]: User<{User.Identity?.Name}> DELETE channel by id<{сhannelId}>");
             return NoContent();
         }
         return NotFound();

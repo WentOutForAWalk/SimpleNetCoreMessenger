@@ -18,46 +18,43 @@ public class MessageService
                                 .FirstOrDefault(c => c.ChannelId == id);
     }
 
-    public Message? AddMessage(Guid channelId, CreateMessageRequest request)
+    public Message? AddMessage(Guid channelId, CreateMessageRequest request, string userId, string userName)
     {
 
         if (_context.Channels.FirstOrDefault(c => c.ChannelId == channelId) is not { })
             return null;
 
-        Message message = new Message
+        Message message = new()
         {
-            SenderName = request.SenderName,
+            SenderName = userName,
             Text = request.Text,
             ChannelId = channelId,
+            OwnerId = userId
         };
         _context.Messages.Add(message);
         _context.SaveChanges();
         return message;
     }
 
-    public bool EditMessage(Guid channelId, Guid messageId, CreateMessageRequest request)
+    public bool EditMessage(string userId, string userName, Guid channelId, Guid messageId, CreateMessageRequest request)
     {
-        if (_context.Messages.FirstOrDefault(m => m.MessageId == messageId) is not { } message)
+        if (_context.Messages.FirstOrDefault(m => m.OwnerId == userId && m.MessageId == messageId && m.ChannelId == channelId) is not { } message)
             return false;
-
-        if (message.ChannelId != channelId) 
-        {
-            return false;
-        }
 
         message.Text = request.Text;
-        message.SenderName = request.SenderName;
+        message.SenderName = userName;
         
         _context.SaveChanges();
         return true;
     }
 
     // wow
-    public bool RemoveMessage(Guid channelId, Guid messageId)
+    public bool RemoveMessage(Guid channelId, Guid messageId, string userId)
     {
 
         var message = new Message
         {
+            OwnerId = userId,
             ChannelId = channelId,
             MessageId = messageId
         };
