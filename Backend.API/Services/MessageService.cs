@@ -1,5 +1,6 @@
 ﻿using Backend.API.Data;
 using Backend.API.DTO.Message;
+using Backend.API.DTO.Service;
 using Backend.API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,67 +8,69 @@ namespace Backend.API.Services;
 public class MessageService
 {
     private readonly DataContext _context;
-    public MessageService(DataContext context)
+    private readonly UserContextService _userContext;
+    public MessageService(DataContext context,UserContextService userContext)
     {
         _context = context;
+        _userContext = userContext;
     }
 
-    public Channel? GetChannelMessage(Guid id)
+    public async Task<ServiceDataResult<List<Message>>> GetChannelMessageAsync(Guid id)
     {
-        return _context.Channels.Include(c => c.Messages)
-                                .FirstOrDefault(c => c.ChannelId == id);
+        return ServiceDataResult<List<Message>>.SuccessWithDate(await _context.Messages.Where(m => m.ChannelId == id).ToListAsync());
     }
-
-    public Message? AddMessage(Guid channelId, CreateMessageRequest request, string userId, string userName)
+    public async Task<ServiceDataResult<Message>> AddMessageAsync(Guid channelId, CreateMessageRequest request)
     {
 
-        if (_context.Channels.FirstOrDefault(c => c.ChannelId == channelId) is not { })
-            return null;
+        if (!await _context.Channels.AnyAsync(c => c.ChannelId == channelId))
+            return ServiceDataResult<Message>.Failure("Channel not found");
 
         Message message = new()
         {
-            SenderName = userName,
+            SenderName = _userContext.GetUserName(),
             Text = request.Text,
             ChannelId = channelId,
-            OwnerId = userId
+            OwnerId = _userContext.GetUserId()
         };
         _context.Messages.Add(message);
-        _context.SaveChanges();
-        return message;
+        await _context.SaveChangesAsync();
+        return ServiceDataResult<Message>.Success();
     }
-
-    public bool EditMessage(string userId, string userName, Guid channelId, Guid messageId, CreateMessageRequest request)
+    public async Task<ServiceResult> EditMessageAsync(Guid messageId, CreateMessageRequest request)
     {
-        if (_context.Messages.FirstOrDefault(m => m.OwnerId == userId && m.MessageId == messageId && m.ChannelId == channelId) is not { } message)
-            return false;
+        if (string.IsNullOrWhiteSpace(request.Text))
+            return ServiceResult.Failure("empty text");
+
+        if (await _context.Messages.FirstOrDefaultAsync(m => m.MessageId == messageId 
+                                                          && m.OwnerId == _userContext.GetUserId()
+                                                       ) is not { } message)
+        return ServiceResult.Failure("no permission");
 
         message.Text = request.Text;
-        message.SenderName = userName;
-        
-        _context.SaveChanges();
-        return true;
-    }
+        await _context.SaveChangesAsync();
 
-    // wow
-    public bool RemoveMessage(Guid channelId, Guid messageId, string userId)
+        return ServiceResult.Success();
+    }
+    public async Task<ServiceResult> RemoveMessageAsync(Guid messageId)
     {
 
         var message = new Message
         {
-            OwnerId = userId,
-            ChannelId = channelId,
-            MessageId = messageId
+            MessageId = messageId,
+            OwnerId = _userContext.GetUserId()
         };
 
         _context.Entry(message).State = EntityState.Deleted;
 
         try
         {
-            return _context.SaveChanges() > 0;
+            if (await _context.SaveChangesAsync() > 0)
+                return ServiceResult.Success();
+            return ServiceResult.Failure("db save changes error");
         }
         catch (DbUpdateConcurrencyException)
         {
-            return false;
+            return ServiceResult.Failure("no permission");
         }
 
     }

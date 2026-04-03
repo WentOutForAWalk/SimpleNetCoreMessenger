@@ -12,9 +12,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ChannelService>();
 builder.Services.AddScoped<MessageService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UserContextService>();
 
 // Controllers
 builder.Services.AddControllers();
+
+// adds work UserContextService
+builder.Services.AddHttpContextAccessor();
 
 builder.BackendDb();
 

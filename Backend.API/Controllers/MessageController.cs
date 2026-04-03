@@ -3,13 +3,14 @@ using Backend.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Backend.API.Extensions;
 
 namespace Backend.API.Controllers;
 
 
 [Authorize]
 [ApiController]
-[Route("a/channels/{channelId:guid}/messages")]
+[Route("a/messages")]
 public class MessageController : ControllerBase
 {
     MessageService _messageService;
@@ -21,54 +22,31 @@ public class MessageController : ControllerBase
 
 
     [HttpGet]
-    public IActionResult Read(Guid channelId)
+    public async Task<IActionResult> ReadAsync([FromQuery] Guid channelId)
     {
-        if (_messageService.GetChannelMessage(channelId) is { } channelMessage)
-        {
-            return Ok(channelMessage);
-        }
-        return NotFound();
+        var result = await _messageService.GetChannelMessageAsync(channelId);
+        return result.ToActionResult();
     }
-
-
     [HttpPost]
-    public IActionResult Create(Guid channelId, CreateMessageRequest request)
+    public async Task<IActionResult> CreateAsync([FromQuery] Guid channelId, [FromBody] CreateMessageRequest request)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var userName = User.Identity?.Name;
+        var result = await _messageService.AddMessageAsync(channelId, request);
+        return result.ToActionResult();
+    }
 
-        if (_messageService.AddMessage(channelId, request, userId, userName) is { } message)
-        {
-            return Created($"a/channels/{channelId}/messages/{message.MessageId}", message);
-        }
-        return NotFound();
+    [HttpPut]
+    public async Task<IActionResult> UpdateAsync([FromQuery] Guid messageId, [FromBody] CreateMessageRequest request)
+    {
+        var result = await _messageService.EditMessageAsync(messageId, request);
+        return result.ToActionResult();
     }
 
 
-    [HttpPut("{messageId:guid}")]
-    public IActionResult Update(Guid channelId, Guid messageId, CreateMessageRequest request)
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAsync([FromQuery]  Guid messageId)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var userName = User.Identity?.Name;
-
-        if (_messageService.EditMessage(userId, userName, channelId, messageId, request))
-        {
-            return Ok();
-        }
-        return NotFound();
-    }
-
-
-    [HttpDelete("{messageId:guid}")]
-    public IActionResult Delete(Guid channelId, Guid messageId)
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (_messageService.RemoveMessage(channelId, messageId, userId))
-        {
-            return Ok();
-        }
-        return NotFound();
+        var result = await _messageService.RemoveMessageAsync(messageId);
+        return result.ToActionResult();
     }
 
 }

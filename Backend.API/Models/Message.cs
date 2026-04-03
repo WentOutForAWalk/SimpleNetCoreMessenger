@@ -4,7 +4,7 @@
     {
         public string OwnerId { get; set; } = string.Empty;
         public Guid MessageId { get; set; } = Guid.NewGuid();
-        public string? SenderName { get; set; }
+        public string SenderName { get; set; } = string.Empty;
         public string? Text { get; set; }
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
 
