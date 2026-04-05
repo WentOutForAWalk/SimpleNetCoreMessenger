@@ -9,7 +9,7 @@ public class MessageService
 {
     private readonly DataContext _context;
     private readonly UserContextService _userContext;
-    public MessageService(DataContext context,UserContextService userContext)
+    public MessageService(DataContext context, UserContextService userContext)
     {
         _context = context;
         _userContext = userContext;
@@ -32,9 +32,9 @@ public class MessageService
             ChannelId = channelId,
             OwnerId = _userContext.GetUserId()
         };
-        _context.Messages.Add(message);
+        await _context.Messages.AddAsync(message);
         await _context.SaveChangesAsync();
-        return ServiceDataResult<Message>.Success();
+        return ServiceDataResult<Message>.SuccessWithDate(message);
     }
     public async Task<ServiceResult> EditMessageAsync(Guid messageId, CreateMessageRequest request)
     {

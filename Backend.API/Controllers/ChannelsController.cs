@@ -1,8 +1,8 @@
 ﻿using Backend.API.DTO.Channel;
+using Backend.API.Extensions;
 using Backend.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace Backend.API.Controllers;
 
@@ -12,61 +12,38 @@ namespace Backend.API.Controllers;
 [Route("a/channels")]
 public class ChannelsController : ControllerBase
 {
-    ChannelService channelService;
+    private readonly ChannelService channelService;
 
     public ChannelsController(ChannelService channelService)
     {
         this.channelService = channelService;
     }
 
-
     [HttpGet]
-    public IActionResult Read()
+    public async Task<IActionResult> ReadAsync()
     {   // channel summary
-        return Ok(channelService.GetChannelSummary());
+        var result = await channelService.GetChannelSummaryAsync();
+        return result.ToActionResult();
     }
-
 
     [HttpPost]
-    public IActionResult Create([FromBody] ChannelRequest request)
+    public async Task<IActionResult> CreateAsync([FromBody] ChannelRequest request)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        var newChannel = channelService.AddChannel(request, userId);
-        return Created($"a/channels/{newChannel.ChannelId}", newChannel);
+        var result = await channelService.AddChannelAsync(request);
+        return result.ToActionResult();
     }
 
-
-    [HttpPut("{сhannelId:guid}")]
-    public IActionResult Update(Guid сhannelId, [FromBody] ChannelRequest request)
+    [HttpPut]
+    public async Task<IActionResult> UpdateAsync([FromQuery] Guid сhannelId, [FromBody] ChannelRequest request)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (channelService.EditChannel(сhannelId, request, userId))
-        {
-            return NoContent();
-        }
-        return NotFound();
+        var result = await channelService.EditChannelAsync(сhannelId, request);
+        return result.ToActionResult();
     }
 
-
-    [HttpDelete("{сhannelId:guid}")]
-    public IActionResult Delete(Guid сhannelId) 
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAsync([FromQuery] Guid сhannelId) 
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (channelService.DeleteChannel(сhannelId, userId))
-        {
-            return NoContent();
-        }
-        return NotFound();
+        var result = await channelService.DeleteChannelAsync(сhannelId);
+        return result.ToActionResult();
     }
-    
-
-
-
-
-
-
-
 }

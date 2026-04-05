@@ -1,56 +1,56 @@
 ﻿using Backend.API.Data;
 using Backend.API.DTO.Channel;
+using Backend.API.DTO.Service;
 using Backend.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.API.Services;
 
 public class ChannelService
 {
     private readonly DataContext _context;
-    public ChannelService(DataContext context)
+    private readonly UserContextService _userContext;
+    public ChannelService(DataContext context, UserContextService userContext)
     {
         _context = context;
+        _userContext = userContext;
     }
 
-    public IEnumerable<ChannelSummary> GetChannelSummary()
+    public async Task<ServiceDataResult<List<ChannelSummary>>> GetChannelSummaryAsync()
     {
-        return (_context.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName, c.OwnerId)));
+        var data = await _context.Channels.Select(c => new ChannelSummary(c.ChannelId, c.ChannelName, c.OwnerId)).ToListAsync();
+        return ServiceDataResult<List<ChannelSummary>>.SuccessWithDate(data);
     }
-    public Channel AddChannel(ChannelRequest request, string userId)
+    public async Task<ServiceDataResult<Channel>> AddChannelAsync(ChannelRequest request)
     {
-        Channel newChannel = new Channel
+        Channel newChannel = new()
         {
             ChannelName = request.ChannelName,
-            OwnerId = userId
+            OwnerId = _userContext.GetUserId()
         };
 
         _context.Channels.Add(newChannel);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
-
-        return newChannel;
+        return ServiceDataResult<Channel>.SuccessWithDate(newChannel);
     }
-    public bool EditChannel(Guid id, ChannelRequest request, string userId)
+    public async Task<ServiceResult> EditChannelAsync(Guid channelId, ChannelRequest request)
     {
-        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id && c.OwnerId == userId) is not { } channel)
-            return false;
-
+        if (_context.Channels.FirstOrDefault(c => c.ChannelId == channelId && c.OwnerId == _userContext.GetUserId()) is not { } channel)
+            return ServiceResult.Failure("no permission");
+            
         channel.ChannelName = request.ChannelName;
-        _context.SaveChanges();
-        return true;
+        await _context.SaveChangesAsync();
+        return ServiceResult.Success();
     }
-    public bool DeleteChannel(Guid id, string userId)
+    public async Task<ServiceResult> DeleteChannelAsync(Guid id)
     {
-        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id && c.OwnerId == userId) is not { } channel)
-        {
-            return false;
-        }
+        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id && c.OwnerId == _userContext.GetUserId()) is not { } channel)
+            return ServiceResult.Failure("no permission");
 
         _context.Channels.Remove(channel);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
-        return true;
+        return ServiceResult.Success();
     }
-
-
 }
