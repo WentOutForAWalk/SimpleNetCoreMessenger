@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#09000A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>◉ VOID MESSENGER</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
@@ -11,44 +14,62 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #111111;
-            --bg-tertiary: #1a1a1a;
-            --bg-hover: #1e1e1e;
-            --bg-active: #252525;
-            --metal-1: #1c1c1e;
-            --metal-2: #2c2c2e;
-            --metal-3: #3a3a3c;
-            --metal-shine: #4a4a4c;
+            --bg-primary: #09000A;
+            --bg-secondary: #120014;
+            --bg-tertiary: #1a001f;
+            --bg-hover: #200028;
+            --bg-active: #280030;
+            --purple-1: #2d0a3d;
+            --purple-2: #3d1050;
+            --purple-3: #4d1563;
+            --purple-shine: #6d1f8f;
+            --purple-accent: #8b5cf6;
+            --purple-bright: #a78bfa;
             --text-primary: #e5e5e5;
-            --text-secondary: #8e8e93;
-            --text-muted: #555555;
-            --accent: #ffffff;
-            --border: #222222;
-            --border-light: #2e2e2e;
+            --text-secondary: #a78bfa;
+            --text-muted: #6b4f8a;
+            --accent: #a78bfa;
+            --border: rgba(139, 92, 246, 0.15);
+            --border-light: rgba(139, 92, 246, 0.25);
             --danger: #ff3b30;
             --danger-dim: rgba(255,59,48,0.12);
             --shadow: rgba(0,0,0,0.8);
+            --glass-bg: rgba(18, 0, 20, 0.7);
+            --glass-border: rgba(167, 139, 250, 0.2);
         }
 
         html, body {
             height: 100%;
             overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             height: 100vh;
             height: 100dvh;
+            position: relative;
+            touch-action: pan-y;
         }
 
+            body::before {
+                content: '';
+                position: fixed;
+                inset: 0;
+                background: radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(167, 139, 250, 0.1) 0%, transparent 50%);
+                pointer-events: none;
+                z-index: 0;
+            }
+
         ::-webkit-scrollbar {
-            width: 3px;
+            width: 4px;
         }
 
         ::-webkit-scrollbar-track {
@@ -56,9 +77,13 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--metal-3);
-            border-radius: 3px;
+            background: var(--purple-3);
+            border-radius: 4px;
         }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--purple-accent);
+            }
 
         /* ==================== LOGIN ==================== */
         #loginScreen {
@@ -76,7 +101,7 @@
                 content: '';
                 position: absolute;
                 inset: 0;
-                background: radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.02) 0%, transparent 70%);
+                background: radial-gradient(ellipse at 50% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
                 pointer-events: none;
             }
 
@@ -84,100 +109,110 @@
             position: relative;
             z-index: 1;
             width: 100%;
-            max-width: 360px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
-            border-radius: 16px;
-            padding: 36px 28px;
-            box-shadow: 0 20px 60px var(--shadow);
+            max-width: 380px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px 32px;
+            box-shadow: 0 24px 72px rgba(0,0,0,0.6), 0 0 0 1px rgba(139, 92, 246, 0.1) inset;
         }
 
         .login-logo {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 8px;
+            gap: 12px;
+            margin-bottom: 10px;
         }
 
         .login-logo-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background: var(--accent);
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+            box-shadow: 0 0 20px rgba(167, 139, 250, 0.6);
             animation: pulse-dot 3s ease-in-out infinite;
         }
 
         @keyframes pulse-dot {
             0%, 100% {
                 opacity: 1;
-                box-shadow: 0 0 10px rgba(255,255,255,0.3);
+                box-shadow: 0 0 20px rgba(167, 139, 250, 0.6);
+                transform: scale(1);
             }
 
             50% {
-                opacity: 0.4;
-                box-shadow: 0 0 4px rgba(255,255,255,0.1);
+                opacity: 0.5;
+                box-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
+                transform: scale(0.9);
             }
         }
 
         .login-logo-text {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            letter-spacing: 8px;
-            color: var(--accent);
+            letter-spacing: 10px;
+            background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .login-subtitle {
             text-align: center;
             color: var(--text-muted);
-            font-size: 12px;
-            margin-bottom: 28px;
-            letter-spacing: 0.5px;
+            font-size: 13px;
+            margin-bottom: 32px;
+            letter-spacing: 1px;
         }
 
         .login-tabs {
             display: flex;
-            margin-bottom: 24px;
-            background: var(--metal-1);
-            border-radius: 8px;
-            padding: 3px;
+            margin-bottom: 28px;
+            background: rgba(45, 10, 61, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 10px;
+            padding: 4px;
             border: 1px solid var(--border);
         }
 
         .login-tab {
             flex: 1;
-            padding: 8px;
+            padding: 10px;
             text-align: center;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 12px;
             font-weight: 600;
             color: var(--text-muted);
-            transition: all 0.2s;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             text-transform: uppercase;
             border: none;
             background: none;
         }
 
             .login-tab.active {
-                background: var(--accent);
-                color: var(--bg-primary);
+                background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+                color: #ffffff;
+                box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
             }
 
         .login-field {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
             .login-field label {
                 display: block;
-                font-size: 10px;
+                font-size: 11px;
                 font-weight: 600;
                 color: var(--text-secondary);
-                margin-bottom: 6px;
+                margin-bottom: 8px;
                 letter-spacing: 1.5px;
                 text-transform: uppercase;
                 font-family: 'Space Grotesk', sans-serif;
@@ -185,48 +220,53 @@
 
         .login-input {
             width: 100%;
-            padding: 11px 14px;
-            background: var(--metal-1);
+            padding: 12px 16px;
+            background: rgba(45, 10, 61, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.25s;
         }
 
             .login-input:focus {
-                border-color: var(--metal-shine);
+                border-color: var(--purple-accent);
+                box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
             }
 
         .login-btn {
             width: 100%;
-            padding: 12px;
-            background: var(--accent);
+            padding: 13px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
             border: none;
-            border-radius: 8px;
-            color: var(--bg-primary);
+            border-radius: 10px;
+            color: #ffffff;
             font-family: 'Space Grotesk', sans-serif;
             font-size: 13px;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.15s;
-            margin-top: 6px;
+            transition: all 0.2s;
+            margin-top: 8px;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
         }
 
             .login-btn:hover {
-                background: #d0d0d0;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
             }
 
             .login-btn:active {
-                transform: scale(0.98);
+                transform: translateY(0);
             }
 
             .login-btn:disabled {
-                opacity: 0.4;
+                opacity: 0.5;
                 cursor: not-allowed;
                 transform: none;
             }
@@ -235,15 +275,15 @@
             color: var(--danger);
             font-size: 12px;
             text-align: center;
-            margin-top: 12px;
-            min-height: 16px;
+            margin-top: 14px;
+            min-height: 18px;
         }
 
         .spinner-s {
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(0,0,0,0.15);
-            border-top-color: var(--bg-primary);
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: #ffffff;
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
             display: inline-block;
@@ -261,6 +301,8 @@
             display: none;
             width: 100%;
             height: 100%;
+            position: relative;
+            z-index: 1;
         }
 
         .app-wrap {
@@ -271,9 +313,11 @@
 
         /* ==================== SIDEBAR ==================== */
         .sidebar {
-            width: 300px;
-            min-width: 300px;
-            background: var(--bg-secondary);
+            width: 320px;
+            min-width: 320px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
@@ -281,7 +325,7 @@
         }
 
         .sidebar-header {
-            padding: 16px 16px 14px;
+            padding: 18px 18px 16px;
             border-bottom: 1px solid var(--border);
         }
 
@@ -289,63 +333,71 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .logo {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            letter-spacing: 5px;
-            color: var(--accent);
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .logo-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: var(--accent);
             border-radius: 50%;
-            box-shadow: 0 0 8px rgba(255,255,255,0.25);
+            box-shadow: 0 0 12px rgba(167, 139, 250, 0.6);
             animation: pulse-dot 3s ease-in-out infinite;
         }
 
         .user-btn {
-            width: 34px;
-            height: 34px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
-            background: var(--metal-1);
+            background: rgba(45, 10, 61, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid var(--border-light);
             color: var(--text-secondary);
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.15s;
+            transition: all 0.2s;
             position: relative;
         }
 
             .user-btn:hover {
-                border-color: var(--metal-3);
-                color: var(--text-primary);
+                border-color: var(--purple-accent);
+                color: var(--accent);
+                box-shadow: 0 0 16px rgba(139, 92, 246, 0.3);
             }
 
         .user-drop {
             display: none;
             position: absolute;
-            top: 40px;
+            top: 44px;
             right: 0;
-            background: var(--bg-secondary);
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-light);
-            border-radius: 10px;
-            padding: 4px;
-            min-width: 170px;
-            box-shadow: 0 12px 40px var(--shadow);
+            border-radius: 12px;
+            padding: 6px;
+            min-width: 180px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.6);
             z-index: 200;
         }
 
@@ -354,33 +406,33 @@
             }
 
         .user-drop-name {
-            padding: 8px 12px;
+            padding: 10px 14px;
             font-size: 11px;
             color: var(--text-muted);
             border-bottom: 1px solid var(--border);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             font-family: 'Space Grotesk', sans-serif;
             letter-spacing: 0.5px;
         }
 
         .user-drop-item {
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 10px 14px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 13px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             border: none;
             background: none;
             color: var(--text-primary);
             width: 100%;
             font-family: 'Inter', sans-serif;
-            transition: background 0.1s;
+            transition: all 0.15s;
         }
 
             .user-drop-item:hover {
-                background: var(--bg-hover);
+                background: rgba(139, 92, 246, 0.15);
             }
 
             .user-drop-item.danger {
@@ -393,56 +445,61 @@
 
         .btn-new-ch {
             width: 100%;
-            padding: 9px 14px;
-            background: var(--metal-1);
+            padding: 11px 16px;
+            background: rgba(139, 92, 246, 0.15);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             color: var(--text-secondary);
             font-family: 'Inter', sans-serif;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
             .btn-new-ch:hover {
-                background: var(--metal-2);
-                color: var(--text-primary);
+                background: rgba(139, 92, 246, 0.25);
+                color: var(--accent);
+                border-color: var(--purple-accent);
             }
 
             .btn-new-ch .p-icon {
-                font-size: 16px;
+                font-size: 18px;
                 font-weight: 300;
             }
 
         .ch-list {
             flex: 1;
             overflow-y: auto;
-            padding: 6px;
+            padding: 8px;
+            -webkit-overflow-scrolling: touch;
         }
 
         .ch-item {
-            padding: 10px 12px;
-            margin-bottom: 1px;
-            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 2px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.1s;
+            transition: all 0.15s;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             position: relative;
             border: 1px solid transparent;
         }
 
             .ch-item:hover {
-                background: var(--bg-hover);
+                background: rgba(139, 92, 246, 0.1);
+                border-color: var(--border);
             }
 
             .ch-item.active {
-                background: var(--bg-active);
+                background: rgba(139, 92, 246, 0.2);
                 border-color: var(--border-light);
             }
 
@@ -453,21 +510,24 @@
                     top: 50%;
                     transform: translateY(-50%);
                     width: 3px;
-                    height: 18px;
-                    background: var(--accent);
-                    border-radius: 0 2px 2px 0;
+                    height: 20px;
+                    background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+                    border-radius: 0 3px 3px 0;
+                    box-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
                 }
 
         .ch-ava {
-            width: 36px;
-            height: 36px;
-            background: var(--metal-1);
-            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            background: rgba(45, 10, 61, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             color: var(--text-secondary);
             flex-shrink: 0;
@@ -480,11 +540,12 @@
         }
 
         .ch-name {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: var(--text-primary);
         }
 
         .ch-id {
@@ -492,14 +553,14 @@
             color: var(--text-muted);
             font-family: 'Space Grotesk', monospace;
             letter-spacing: 0.3px;
-            margin-top: 1px;
+            margin-top: 2px;
         }
 
         .ch-acts {
             display: flex;
-            gap: 1px;
+            gap: 2px;
             opacity: 0;
-            transition: opacity 0.1s;
+            transition: opacity 0.15s;
         }
 
         .ch-item:hover .ch-acts {
@@ -507,23 +568,23 @@
         }
 
         .ch-act-btn {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border: none;
             background: transparent;
             color: var(--text-muted);
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 13px;
-            transition: all 0.1s;
+            transition: all 0.15s;
         }
 
             .ch-act-btn:hover {
-                background: var(--metal-2);
-                color: var(--text-primary);
+                background: rgba(139, 92, 246, 0.2);
+                color: var(--accent);
             }
 
             .ch-act-btn.del:hover {
@@ -536,7 +597,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: var(--bg-primary);
+            background: transparent;
             min-width: 0;
         }
 
@@ -550,66 +611,83 @@
         }
 
         .empty-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-            opacity: 0.12;
+            font-size: 56px;
+            margin-bottom: 16px;
+            opacity: 0.15;
             font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .empty-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 16px;
-            font-weight: 500;
-            letter-spacing: 3px;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.4;
         }
 
         .empty-sub {
-            font-size: 12px;
-            opacity: 0.5;
+            font-size: 13px;
+            opacity: 0.3;
         }
 
         .chat-hdr {
-            padding: 12px 20px;
+            padding: 14px 24px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: var(--bg-secondary);
-            min-height: 56px;
+            gap: 14px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            min-height: 64px;
             flex-shrink: 0;
         }
 
         .back-btn {
             display: none;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border: 1px solid var(--border);
-            background: var(--metal-1);
+            background: rgba(45, 10, 61, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             color: var(--text-secondary);
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 16px;
             flex-shrink: 0;
+            transition: all 0.15s;
         }
 
             .back-btn:hover {
-                color: var(--text-primary);
+                color: var(--accent);
+                border-color: var(--purple-accent);
             }
 
         .chat-hdr-ava {
-            width: 32px;
-            height: 32px;
-            background: var(--metal-1);
-            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            background: rgba(45, 10, 61, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--text-secondary);
             border: 1px solid var(--border);
@@ -622,24 +700,27 @@
         }
 
         .chat-hdr-name {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
+            color: var(--text-primary);
         }
 
         .chat-hdr-sub {
-            font-size: 10px;
+            font-size: 11px;
             color: var(--text-muted);
             font-family: 'Space Grotesk', monospace;
             letter-spacing: 0.3px;
+            margin-top: 2px;
         }
 
-        /* ==================== MESSAGES ==================== */
+        /* ==================== MESSAGES (ВОЗВРАЩАЕМ ЗАЗОРЫ КАК БЫЛО) ==================== */
         .msgs {
             flex: 1;
             overflow-y: auto;
             padding: 16px 20px;
             display: flex;
             flex-direction: column;
+            -webkit-overflow-scrolling: touch;
         }
 
         .date-sep {
@@ -648,7 +729,9 @@
         }
 
             .date-sep span {
-                background: var(--metal-1);
+                background: var(--glass-bg);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
                 border: 1px solid var(--border);
                 padding: 3px 12px;
                 border-radius: 12px;
@@ -711,14 +794,18 @@
         }
 
         .msg-row.other .msg-bubble {
-            background: var(--metal-1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border);
             border-bottom-left-radius: 4px;
         }
 
         .msg-row.mine .msg-bubble {
-            background: var(--metal-2);
-            border: 1px solid var(--metal-3);
+            background: rgba(139, 92, 246, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-light);
             border-bottom-right-radius: 4px;
         }
 
@@ -746,7 +833,7 @@
             display: flex;
             gap: 1px;
             opacity: 0;
-            transition: opacity 0.1s;
+            transition: opacity 0.15s;
             flex-shrink: 0;
         }
 
@@ -766,23 +853,26 @@
             align-items: center;
             justify-content: center;
             font-size: 11px;
-            transition: all 0.1s;
+            transition: all 0.15s;
         }
 
             .msg-act:hover {
-                background: var(--metal-2);
-                color: var(--text-primary);
+                background: rgba(139, 92, 246, 0.2);
+                color: var(--accent);
             }
 
             .msg-act.del:hover {
                 color: var(--danger);
+                background: var(--danger-dim);
             }
 
         /* ==================== INPUT ==================== */
         .input-area {
             padding: 12px 20px 16px;
             border-top: 1px solid var(--border);
-            background: var(--bg-secondary);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             flex-shrink: 0;
         }
 
@@ -792,9 +882,11 @@
             justify-content: space-between;
             padding: 7px 12px;
             margin-bottom: 8px;
-            background: var(--metal-1);
+            background: rgba(139, 92, 246, 0.15);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid var(--border);
-            border-left: 3px solid var(--accent);
+            border-left: 3px solid var(--purple-accent);
             border-radius: 6px;
             font-size: 11px;
             color: var(--text-secondary);
@@ -815,10 +907,11 @@
             font-size: 14px;
             padding: 0 4px;
             border-radius: 4px;
+            transition: all 0.15s;
         }
 
             .edit-bar-x:hover {
-                color: var(--text-primary);
+                color: var(--accent);
             }
 
         .input-row {
@@ -830,7 +923,9 @@
         .msg-input {
             flex: 1;
             padding: 9px 13px;
-            background: var(--metal-1);
+            background: rgba(45, 10, 61, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid var(--border);
             border-radius: 10px;
             color: var(--text-primary);
@@ -841,17 +936,18 @@
             height: 38px;
             max-height: 140px;
             line-height: 1.4;
-            transition: border-color 0.15s;
+            transition: all 0.15s;
         }
 
             .msg-input:focus {
-                border-color: var(--metal-3);
+                border-color: var(--purple-accent);
+                box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
             }
 
         .send-btn {
             width: 38px;
             height: 38px;
-            background: var(--accent);
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
             border: none;
             border-radius: 10px;
             cursor: pointer;
@@ -860,29 +956,31 @@
             justify-content: center;
             transition: all 0.15s;
             flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
             .send-btn:hover {
-                background: #ccc;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
             }
 
             .send-btn:active {
-                transform: scale(0.93);
+                transform: translateY(0);
             }
 
             .send-btn svg {
                 width: 16px;
                 height: 16px;
-                fill: var(--bg-primary);
+                fill: #ffffff;
             }
 
         /* ==================== MODAL ==================== */
         .modal-ov {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.65);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            background: rgba(9, 0, 10, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -895,13 +993,15 @@
             }
 
         .modal {
-            background: var(--bg-secondary);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-light);
             border-radius: 14px;
             padding: 24px;
             width: 100%;
             max-width: 360px;
-            box-shadow: 0 20px 60px var(--shadow);
+            box-shadow: 0 24px 72px rgba(0,0,0,0.7);
         }
 
         .modal-title {
@@ -911,12 +1011,15 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 18px;
+            color: var(--text-secondary);
         }
 
         .modal-input {
             width: 100%;
             padding: 10px 14px;
-            background: var(--metal-1);
+            background: rgba(45, 10, 61, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid var(--border);
             border-radius: 8px;
             color: var(--text-primary);
@@ -924,10 +1027,12 @@
             font-size: 14px;
             outline: none;
             margin-bottom: 18px;
+            transition: all 0.2s;
         }
 
             .modal-input:focus {
-                border-color: var(--metal-3);
+                border-color: var(--purple-accent);
+                box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
             }
 
         .modal-btns {
@@ -954,17 +1059,20 @@
             }
 
                 .m-btn.cancel:hover {
-                    background: var(--metal-1);
+                    background: rgba(139, 92, 246, 0.1);
+                    border-color: var(--purple-accent);
                 }
 
             .m-btn.ok {
-                background: var(--accent);
-                color: var(--bg-primary);
-                border-color: var(--accent);
+                background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+                color: #ffffff;
+                border-color: transparent;
+                box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
             }
 
                 .m-btn.ok:hover {
-                    background: #ccc;
+                    transform: translateY(-1px);
+                    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
                 }
 
             .m-btn.danger {
@@ -990,12 +1098,14 @@
 
         .toast {
             padding: 8px 16px;
-            background: var(--metal-2);
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-light);
             border-radius: 8px;
             font-size: 12px;
             color: var(--text-primary);
-            box-shadow: 0 6px 24px var(--shadow);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.5);
             animation: tin 0.2s ease, tout 0.2s ease 2.7s forwards;
             font-family: 'Inter', sans-serif;
         }
@@ -1003,6 +1113,7 @@
             .toast.err {
                 border-color: var(--danger);
                 color: var(--danger);
+                background: rgba(255, 59, 48, 0.1);
             }
 
         @keyframes tin {
@@ -1035,6 +1146,11 @@
 
         /* ==================== MOBILE ==================== */
         @media (max-width: 768px) {
+            body {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+
             .sidebar {
                 position: fixed;
                 top: 0;
@@ -1072,10 +1188,63 @@
 
             .input-area {
                 padding: 10px 12px 14px;
+                padding-bottom: max(14px, env(safe-area-inset-bottom));
             }
 
             .chat-hdr {
                 padding: 10px 14px;
+                padding-top: max(10px, env(safe-area-inset-top));
+            }
+
+            .sidebar-header {
+                padding-top: max(18px, env(safe-area-inset-top));
+            }
+
+            .login-box {
+                max-width: 100%;
+                padding: 32px 24px;
+            }
+
+            .toast-box {
+                top: max(16px, env(safe-area-inset-top));
+                right: 12px;
+                left: 12px;
+            }
+
+            .toast {
+                width: 100%;
+            }
+
+            .modal-ov {
+                padding: 16px;
+            }
+
+            .ch-name {
+                font-size: 15px;
+            }
+
+            .msg-bubble {
+                font-size: 15px;
+            }
+
+            .msg-input {
+                font-size: 16px;
+            }
+
+            .login-input {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .login-logo-text {
+                font-size: 24px;
+                letter-spacing: 8px;
+            }
+
+            .logo {
+                font-size: 18px;
+                letter-spacing: 5px;
             }
         }
     </style>
@@ -1216,6 +1385,7 @@
                     const r = await fetch(`${API}/Auth/register`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
                         body: JSON.stringify({ name, password: pass })
                     });
                     if (!r.ok) {
@@ -1227,6 +1397,7 @@
                 const r = await fetch(`${API}/Auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify({ name, password: pass })
                 });
 
@@ -1268,7 +1439,7 @@
         // auto-check session
         (async () => {
             try {
-                const r = await fetch(`${API}/channels`);
+                const r = await fetch(`${API}/channels`, { credentials: 'include' });
                 if (r.ok) {
                     const s = localStorage.getItem('void_u');
                     if (s) { user = s; enterApp(); return; }
@@ -1287,7 +1458,11 @@
 
         // ===================== API =====================
         async function api(url, method = 'GET', body = null) {
-            const o = { method, headers: { 'Content-Type': 'application/json' } };
+            const o = {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'
+            };
             if (body) o.body = JSON.stringify(body);
             const r = await fetch(url, o);
             if (r.status === 401) {
@@ -1318,25 +1493,25 @@
 
             if (!channels.length) {
                 el.innerHTML = `<div class="empty-state" style="padding:30px 16px;">
-                <div class="empty-icon" style="font-size:28px;">◌</div>
-                <div class="empty-sub" style="margin-top:6px;">No channels yet</div>
-            </div>`;
+                    <div class="empty-icon" style="font-size:28px;">◌</div>
+                    <div class="empty-sub" style="margin-top:6px;">No channels yet</div>
+                </div>`;
                 return;
             }
 
             el.innerHTML = channels.map(c => {
                 const sn = esc(c.channelName);
                 return `<div class="ch-item ${c.channelId === activeCh ? 'active' : ''}" onclick="selCh('${c.channelId}')">
-                <div class="ch-ava">${c.channelName.charAt(0).toUpperCase()}</div>
-                <div class="ch-info">
-                    <div class="ch-name">${esc(c.channelName)}</div>
-                    <div class="ch-id">${c.channelId.substring(0, 8)}</div>
-                </div>
-                <div class="ch-acts" onclick="event.stopPropagation()">
-                    <button class="ch-act-btn" onclick="showEditCh('${c.channelId}','${sn}')" title="Edit">✎</button>
-                    <button class="ch-act-btn del" onclick="showDelCh('${c.channelId}','${sn}')" title="Delete">✕</button>
-                </div>
-            </div>`;
+                    <div class="ch-ava">${c.channelName.charAt(0).toUpperCase()}</div>
+                    <div class="ch-info">
+                        <div class="ch-name">${esc(c.channelName)}</div>
+                        <div class="ch-id">${c.channelId.substring(0, 8)}</div>
+                    </div>
+                    <div class="ch-acts" onclick="event.stopPropagation()">
+                        <button class="ch-act-btn" onclick="showEditCh('${c.channelId}','${sn}')" title="Edit">✎</button>
+                        <button class="ch-act-btn del" onclick="showDelCh('${c.channelId}','${sn}')" title="Delete">✕</button>
+                    </div>
+                </div>`;
             }).join('');
         }
 
@@ -1391,7 +1566,7 @@
         async function loadMsgs() {
             if (!activeCh) return;
             try {
-                const d = await api(`${API}/channels/${activeCh}/messages`);
+                const d = await api(`${API}/messages?channelId=${activeCh}`);
                 const arr = Array.isArray(d) ? d : (d && d.messages ? d.messages : []);
                 const h = JSON.stringify(arr);
                 if (h !== msgsHash) {
@@ -1419,9 +1594,9 @@
 
             if (!msgs.length) {
                 box.innerHTML = `<div class="empty-state" style="flex:1;">
-                <div class="empty-icon" style="font-size:28px;">◌</div>
-                <div class="empty-sub" style="margin-top:6px;">No messages yet</div>
-            </div>`;
+                    <div class="empty-icon" style="font-size:28px;">◌</div>
+                    <div class="empty-sub" style="margin-top:6px;">No messages yet</div>
+                </div>`;
                 return;
             }
 
@@ -1430,14 +1605,14 @@
             let lastDate = '';
 
             msgs.forEach(m => {
-                const sender = m.senderName || m.userName || m.authorName || '?';
+                const sender = m.senderName || '?';
                 const mine = sender === user;
                 const side = mine ? 'mine' : 'other';
-                const txt = m.text || m.content || m.body || '';
-                const mid = m.messageId || m.id;
-                const edited = m.isEdited || m.edited || false;
+                const txt = m.text || '';
+                const mid = m.messageId;
 
-                const dt = parseD(m.sentAt || m.createdAt || m.timestamp);
+                // ИСПРАВЛЕНИЕ ВРЕМЕНИ: конвертируем UTC в локальное время
+                const dt = parseD(m.sentAt);
                 const ds = fmtDate(dt);
                 const ts = fmtTime(dt);
 
@@ -1456,18 +1631,17 @@
                 }
 
                 const acts = mine ? `<div class="msg-acts">
-                <button class="msg-act" onclick="startEdit('${esca(mid)}')" title="Edit">✎</button>
-                <button class="msg-act del" onclick="showDelMsg('${esca(mid)}')" title="Delete">✕</button>
-            </div>` : '';
+                    <button class="msg-act" onclick="startEdit('${esca(mid)}')" title="Edit">✎</button>
+                    <button class="msg-act del" onclick="showDelMsg('${esca(mid)}')" title="Delete">✕</button>
+                </div>` : '';
 
                 html += `<div class="msg-row ${side}">
-                ${mine ? acts : ''}
-                <div class="msg-bubble">${esc(txt)}<div class="msg-meta">
-                    ${edited ? '<span class="msg-edited">edited</span>' : ''}
-                    <span class="msg-time">${ts}</span>
-                </div></div>
-                ${!mine ? acts : ''}
-            </div>`;
+                    ${mine ? acts : ''}
+                    <div class="msg-bubble">${esc(txt)}<div class="msg-meta">
+                        <span class="msg-time">${ts}</span>
+                    </div></div>
+                    ${!mine ? acts : ''}
+                </div>`;
             });
 
             if (lastSender !== null) html += '</div>';
@@ -1481,10 +1655,10 @@
 
             try {
                 if (editMsgId) {
-                    await api(`${API}/channels/${activeCh}/messages/${editMsgId}`, 'PUT', { text: txt });
+                    await api(`${API}/messages?messageId=${editMsgId}`, 'PUT', { text: txt });
                     cancelEdit();
                 } else {
-                    await api(`${API}/channels/${activeCh}/messages`, 'POST', { text: txt });
+                    await api(`${API}/messages?channelId=${activeCh}`, 'POST', { text: txt });
                 }
                 inp.value = '';
                 inp.style.height = '38px';
@@ -1494,11 +1668,11 @@
         }
 
         function startEdit(mid) {
-            const m = msgs.find(x => (x.messageId || x.id) === mid);
+            const m = msgs.find(x => x.messageId === mid);
             if (!m) return;
             editMsgId = mid;
             const inp = document.getElementById('msgInput');
-            inp.value = m.text || m.content || m.body || '';
+            inp.value = m.text || '';
             inp.focus();
             inp.style.height = 'auto';
             inp.style.height = Math.min(inp.scrollHeight, 140) + 'px';
@@ -1516,11 +1690,11 @@
         // ===================== CHANNEL MODALS =====================
         function showNewCh() {
             openModal(`<div class="modal-title">New Channel</div>
-            <input class="modal-input" id="mIn" placeholder="Channel name" autofocus maxlength="64">
-            <div class="modal-btns">
-                <button class="m-btn cancel" onclick="closeModal()">Cancel</button>
-                <button class="m-btn ok" onclick="createCh()">Create</button>
-            </div>`);
+                <input class="modal-input" id="mIn" placeholder="Channel name" autofocus maxlength="64">
+                <div class="modal-btns">
+                    <button class="m-btn cancel" onclick="closeModal()">Cancel</button>
+                    <button class="m-btn ok" onclick="createCh()">Create</button>
+                </div>`);
             setTimeout(() => {
                 const i = document.getElementById('mIn');
                 if (i) { i.focus(); i.onkeydown = e => { if (e.key === 'Enter') createCh(); }; }
@@ -1531,7 +1705,7 @@
             const n = document.getElementById('mIn').value.trim();
             if (!n) return;
             try {
-                await api(`${API}/channels`, 'POST', { name: n, channelName: n });
+                await api(`${API}/channels`, 'POST', { channelName: n });
                 closeModal(); toast('Channel created');
                 await loadCh();
             } catch (e) { if (e.message !== '401') toast('Failed', true); }
@@ -1539,11 +1713,11 @@
 
         function showEditCh(id, name) {
             openModal(`<div class="modal-title">Edit Channel</div>
-            <input class="modal-input" id="mIn" value="${name}" autofocus maxlength="64">
-            <div class="modal-btns">
-                <button class="m-btn cancel" onclick="closeModal()">Cancel</button>
-                <button class="m-btn ok" onclick="editCh('${id}')">Save</button>
-            </div>`);
+                <input class="modal-input" id="mIn" value="${name}" autofocus maxlength="64">
+                <div class="modal-btns">
+                    <button class="m-btn cancel" onclick="closeModal()">Cancel</button>
+                    <button class="m-btn ok" onclick="editCh('${id}')">Save</button>
+                </div>`);
             setTimeout(() => {
                 const i = document.getElementById('mIn');
                 if (i) { i.focus(); i.select(); i.onkeydown = e => { if (e.key === 'Enter') editCh(id); }; }
@@ -1554,7 +1728,7 @@
             const n = document.getElementById('mIn').value.trim();
             if (!n) return;
             try {
-                await api(`${API}/channels/${id}`, 'PUT', { name: n, channelName: n });
+                await api(`${API}/channels?сhannelId=${id}`, 'PUT', { channelName: n });
                 closeModal(); toast('Updated');
                 await loadCh();
                 if (id === activeCh) {
@@ -1566,17 +1740,17 @@
 
         function showDelCh(id, name) {
             openModal(`<div class="modal-title">Delete Channel</div>
-            <p style="color:var(--text-secondary);font-size:13px;margin-bottom:18px;line-height:1.5;">
-            Delete <strong style="color:var(--text-primary)">"${name}"</strong>? This cannot be undone.</p>
-            <div class="modal-btns">
-                <button class="m-btn cancel" onclick="closeModal()">Cancel</button>
-                <button class="m-btn danger" onclick="delCh('${id}')">Delete</button>
-            </div>`);
+                <p style="color:var(--text-secondary);font-size:13px;margin-bottom:18px;line-height:1.5;">
+                Delete <strong style="color:var(--text-primary)">"${name}"</strong>? This cannot be undone.</p>
+                <div class="modal-btns">
+                    <button class="m-btn cancel" onclick="closeModal()">Cancel</button>
+                    <button class="m-btn danger" onclick="delCh('${id}')">Delete</button>
+                </div>`);
         }
 
         async function delCh(id) {
             try {
-                await api(`${API}/channels/${id}`, 'DELETE');
+                await api(`${API}/channels?сhannelId=${id}`, 'DELETE');
                 closeModal(); toast('Deleted');
                 if (id === activeCh) { activeCh = null; showEmpty(); }
                 await loadCh();
@@ -1585,16 +1759,16 @@
 
         function showDelMsg(mid) {
             openModal(`<div class="modal-title">Delete Message</div>
-            <p style="color:var(--text-secondary);font-size:13px;margin-bottom:18px;">Delete this message?</p>
-            <div class="modal-btns">
-                <button class="m-btn cancel" onclick="closeModal()">Cancel</button>
-                <button class="m-btn danger" onclick="delMsg('${esca(mid)}')">Delete</button>
-            </div>`);
+                <p style="color:var(--text-secondary);font-size:13px;margin-bottom:18px;">Delete this message?</p>
+                <div class="modal-btns">
+                    <button class="m-btn cancel" onclick="closeModal()">Cancel</button>
+                    <button class="m-btn danger" onclick="delMsg('${esca(mid)}')">Delete</button>
+                </div>`);
         }
 
         async function delMsg(mid) {
             try {
-                await api(`${API}/channels/${activeCh}/messages/${mid}`, 'DELETE');
+                await api(`${API}/messages?messageId=${mid}`, 'DELETE');
                 closeModal(); toast('Deleted');
                 await loadMsgs();
             } catch (e) { if (e.message !== '401') toast('Failed', true); }
@@ -1626,27 +1800,50 @@
             });
         });
 
-        // ===================== DATE =====================
+        // ===================== DATE (ИСПРАВЛЕННОЕ - АВТООПРЕДЕЛЕНИЕ ЧАСОВОГО ПОЯСА) =====================
         function parseD(v) {
             if (!v) return new Date();
-            const d = new Date(v);
+
+            // Парсим строку даты
+            // Если это "2024-01-15T19:15:00" (без Z), добавляем Z чтобы указать что это UTC
+            let dateStr = v;
+            if (typeof v === 'string' && !v.endsWith('Z') && v.includes('T')) {
+                dateStr = v + 'Z';
+            }
+
+            const d = new Date(dateStr);
             return isNaN(d.getTime()) ? new Date() : d;
         }
 
         function fmtTime(d) {
-            return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            // Автоматически использует локальный часовой пояс браузера
+            const hours = String(d.getHours()).padStart(2, '0');
+            const minutes = String(d.getMinutes()).padStart(2, '0');
+            return `${hours}:${minutes}`;
         }
 
         function fmtDate(d) {
-            const n = new Date();
-            const t = new Date(n.getFullYear(), n.getMonth(), n.getDate());
-            const m = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-            const diff = Math.round((t - m) / (864e5));
-            if (diff === 0) return 'Today';
-            if (diff === 1) return 'Yesterday';
-            const mo = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            if (d.getFullYear() === n.getFullYear()) return `${mo[d.getMonth()]} ${d.getDate()}`;
-            return `${mo[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+            const now = new Date();
+
+            // Создаем начало сегодняшнего дня в локальном времени
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+            // Создаем начало дня сообщения в локальном времени
+            const msgDayStart = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+            // Разница в днях
+            const diffMs = todayStart - msgDayStart;
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Yesterday';
+
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            if (d.getFullYear() === now.getFullYear()) {
+                return `${months[d.getMonth()]} ${d.getDate()}`;
+            }
+            return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
         }
 
         // ===================== UTILS =====================

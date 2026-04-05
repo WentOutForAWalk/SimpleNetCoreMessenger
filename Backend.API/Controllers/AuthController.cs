@@ -10,7 +10,7 @@ namespace Backend.API.Controllers;
 [Route("a/[controller]")]
 public class AuthController : ControllerBase
 {
-    AuthService _authService;
+    private readonly AuthService _authService;
     public AuthController(AuthService authService)
     {
         _authService = authService;
