@@ -1,4 +1,4 @@
-﻿namespace Backend.API.Models;
+﻿namespace Backend.Domain.Models;
 public class Channel
 {
     public Guid ChannelId { get; init; } = Guid.NewGuid();

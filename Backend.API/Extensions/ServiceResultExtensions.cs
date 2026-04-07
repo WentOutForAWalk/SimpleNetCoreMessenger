@@ -1,4 +1,4 @@
-﻿using Backend.API.DTO.Service;
+﻿using Backend.Application.DTO.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.API.Extensions;

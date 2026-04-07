@@ -1,4 +1,4 @@
-﻿namespace Backend.API.Models;
+﻿namespace Backend.Domain.Models;
 public class Message
 {
     public string OwnerId { get; set; } = string.Empty;
