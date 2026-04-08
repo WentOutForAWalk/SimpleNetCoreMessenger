@@ -1,6 +1,6 @@
-﻿using Backend.API.DTO.Channel;
-using Backend.API.Extensions;
-using Backend.API.Services;
+﻿using Backend.API.Extensions;
+using Backend.Application.DTO.Channel;
+using Backend.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

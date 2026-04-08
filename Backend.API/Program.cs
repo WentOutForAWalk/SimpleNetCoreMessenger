@@ -1,6 +1,6 @@
-using Backend.API.Data;
-using Backend.API.Services;
-using Microsoft.AspNetCore.Identity;
+using Backend.API.Extensions;
+using Backend.API.Middleware;
+using Backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,24 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Services
-builder.Services.AddScoped<ChannelService>();
-builder.Services.AddScoped<MessageService>();
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<UserContextService>();
-
 // Controllers
 builder.Services.AddControllers();
 
-// adds work UserContextService
-builder.Services.AddHttpContextAccessor();
-
-builder.BackendDb();
+// Services and dbcontext
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Identity
 builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntityFrameworkStores<DataContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -36,6 +26,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
