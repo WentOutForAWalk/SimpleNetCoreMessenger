@@ -1,4 +1,5 @@
 using Backend.API.Extensions;
+using Backend.API.Middleware;
 using Backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
