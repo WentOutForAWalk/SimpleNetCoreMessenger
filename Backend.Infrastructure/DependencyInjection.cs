@@ -13,8 +13,8 @@ public static class DependencyInjection
         var connString = configuration.GetConnectionString("Backend.API");
 
         services.AddDbContext<DataContext>(options =>
-            options.UseSqlite(connString, sqliteOptions =>
-                sqliteOptions.MigrationsAssembly("Backend.Infrastructure")));
+            options.UseNpgsql(connString, npgsqlOptions =>
+                npgsqlOptions.MigrationsAssembly("Backend.Infrastructure")));
 
         // Services
         services.AddScoped<ChannelService>();
