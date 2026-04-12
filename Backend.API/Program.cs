@@ -1,6 +1,7 @@
 using Backend.API.Extensions;
 using Backend.API.Middleware;
 using Backend.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +22,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.Name = "dotnet";
 });
-
-
+// Check SecurityStamp every 8 hours 
+builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+{
+    options.ValidationInterval = TimeSpan.FromHours(8);
+});
 
 var app = builder.Build();
 
