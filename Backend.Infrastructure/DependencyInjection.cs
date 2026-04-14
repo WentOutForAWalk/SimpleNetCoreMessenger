@@ -1,4 +1,5 @@
-﻿using Backend.Infrastructure.Data;
+﻿using Backend.Application.Interfaces.Services;
+using Backend.Infrastructure.Data;
 using Backend.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +18,10 @@ public static class DependencyInjection
                 npgsqlOptions.MigrationsAssembly("Backend.Infrastructure")));
 
         // Services
-        services.AddScoped<ChannelService>();
-        services.AddScoped<MessageService>();
-        services.AddScoped<AuthService>();
-        services.AddScoped<UserContextService>();
+        services.AddScoped<IChannelService, ChannelService>();
+        services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserContextService, UserContextService>();
 
         // adds work UserContextService
         services.AddHttpContextAccessor();

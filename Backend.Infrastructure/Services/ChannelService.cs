@@ -1,16 +1,17 @@
 ﻿using Backend.Application.DTO.Channel;
 using Backend.Application.DTO.Service;
+using Backend.Application.Interfaces.Services;
 using Backend.Domain.Models;
 using Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Infrastructure.Services;
 
-public class ChannelService
+public class ChannelService : IChannelService
 {
     private readonly DataContext _context;
-    private readonly UserContextService _userContext;
-    public ChannelService(DataContext context, UserContextService userContext)
+    private readonly IUserContextService _userContext;
+    public ChannelService(DataContext context, IUserContextService userContext)
     {
         _context = context;
         _userContext = userContext;

@@ -1,15 +1,16 @@
 ﻿using Backend.Application.DTO.Message;
 using Backend.Application.DTO.Service;
+using Backend.Application.Interfaces.Services;
 using Backend.Domain.Models;
 using Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Infrastructure.Services;
-public class MessageService
+public class MessageService : IMessageService
 {
     private readonly DataContext _context;
-    private readonly UserContextService _userContext;
-    public MessageService(DataContext context, UserContextService userContext)
+    private readonly IUserContextService _userContext;
+    public MessageService(DataContext context, IUserContextService userContext)
     {
         _context = context;
         _userContext = userContext;
