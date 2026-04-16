@@ -44,9 +44,9 @@ public class ChannelService : IChannelService
         await _context.SaveChangesAsync();
         return ServiceResult.Success();
     }
-    public async Task<ServiceResult> DeleteChannelAsync(Guid id)
+    public async Task<ServiceResult> DeleteChannelAsync(Guid channelId)
     {
-        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id && c.OwnerId == _userContext.GetUserId()) is not { } channel)
+        if (_context.Channels.FirstOrDefault(c => c.ChannelId == channelId && c.OwnerId == _userContext.GetUserId()) is not { } channel)
             return ServiceResult.Failure("no permission");
 
         _context.Channels.Remove(channel);
