@@ -126,7 +126,6 @@ public class ChannelServiceTest
         Assert.Equal("new", channelInDb.ChannelName);
         Assert.Equal(1, context.Channels.Count());
     }
-    
     [Fact]
     public async Task EditChannelAsync_NotOwnerEdits_ReturnsFailure()
     {

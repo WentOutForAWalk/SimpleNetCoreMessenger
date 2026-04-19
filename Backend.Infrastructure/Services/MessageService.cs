@@ -18,7 +18,13 @@ public class MessageService : IMessageService
 
     public async Task<ServiceDataResult<List<Message>>> GetChannelMessageAsync(Guid id)
     {
-        return ServiceDataResult<List<Message>>.SuccessWithDate(await _context.Messages.Where(m => m.ChannelId == id).ToListAsync());
+        var messagesList = await _context.Messages.Where(m => m.ChannelId == id).ToListAsync();
+        if (messagesList.Count == 0)
+        {
+            return ServiceDataResult<List<Message>>.Failure("Channel not found");
+        }
+        return ServiceDataResult<List<Message>>.SuccessWithDate(messagesList);
+        
     }
     public async Task<ServiceDataResult<Message>> AddMessageAsync(Guid channelId, CreateMessageRequest request)
     {
