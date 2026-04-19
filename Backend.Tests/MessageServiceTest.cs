@@ -4,7 +4,6 @@ using Backend.Domain.Models;
 using Backend.Infrastructure.Data;
 using Backend.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Moq;
 
 namespace Backend.Tests;

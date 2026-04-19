@@ -60,26 +60,18 @@ public class MessageService : IMessageService
     }
     public async Task<ServiceResult> RemoveMessageAsync(Guid messageId)
     {
+        var message = await _context.Messages
+            .FirstOrDefaultAsync(m => m.MessageId == messageId && m.OwnerId == _userContext.GetUserId());
 
-        var message = new Message
-        {
-            MessageId = messageId,
-            OwnerId = _userContext.GetUserId()
-        };
-
-        _context.Entry(message).State = EntityState.Deleted;
-
-        try
-        {
-            if (await _context.SaveChangesAsync() > 0)
-                return ServiceResult.Success();
-            return ServiceResult.Failure("db save changes error");
-        }
-        catch (DbUpdateConcurrencyException)
+        if (message == null)
         {
             return ServiceResult.Failure("no permission");
         }
 
+        _context.Messages.Remove(message);
+
+        await _context.SaveChangesAsync();
+        return ServiceResult.Success();       
     }
 }
 
