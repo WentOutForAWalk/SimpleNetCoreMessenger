@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Backend.API.Extensions;
-using Backend.Infrastructure.Services;
+﻿using Backend.API.Extensions;
 using Backend.Application.DTO.Message;
+using Backend.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.API.Controllers;
 
@@ -12,9 +12,9 @@ namespace Backend.API.Controllers;
 [Route("a/messages")]
 public class MessageController : ControllerBase
 {
-    private readonly MessageService _messageService;
+    private readonly IMessageService _messageService;
 
-    public MessageController(MessageService messageService)
+    public MessageController(IMessageService messageService)
     {
         _messageService = messageService;
     }

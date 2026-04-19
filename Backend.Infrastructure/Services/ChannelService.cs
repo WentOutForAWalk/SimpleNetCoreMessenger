@@ -1,16 +1,17 @@
 ﻿using Backend.Application.DTO.Channel;
 using Backend.Application.DTO.Service;
+using Backend.Application.Interfaces.Services;
 using Backend.Domain.Models;
 using Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Infrastructure.Services;
 
-public class ChannelService
+public class ChannelService : IChannelService
 {
     private readonly DataContext _context;
-    private readonly UserContextService _userContext;
-    public ChannelService(DataContext context, UserContextService userContext)
+    private readonly IUserContextService _userContext;
+    public ChannelService(DataContext context, IUserContextService userContext)
     {
         _context = context;
         _userContext = userContext;
@@ -43,9 +44,9 @@ public class ChannelService
         await _context.SaveChangesAsync();
         return ServiceResult.Success();
     }
-    public async Task<ServiceResult> DeleteChannelAsync(Guid id)
+    public async Task<ServiceResult> DeleteChannelAsync(Guid channelId)
     {
-        if (_context.Channels.FirstOrDefault(c => c.ChannelId == id && c.OwnerId == _userContext.GetUserId()) is not { } channel)
+        if (_context.Channels.FirstOrDefault(c => c.ChannelId == channelId && c.OwnerId == _userContext.GetUserId()) is not { } channel)
             return ServiceResult.Failure("no permission");
 
         _context.Channels.Remove(channel);

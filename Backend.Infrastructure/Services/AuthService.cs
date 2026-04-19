@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
-
+﻿using Backend.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Infrastructure.Services;
-public class AuthService
+public class AuthService : IAuthService
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
@@ -12,9 +11,6 @@ public class AuthService
         _userManager = userManager;
         _signInManager = signInManager;
     }
-
-
-
     public async Task<bool> RegisterAsync(string name, string password) 
     {
         var user = new IdentityUser { UserName = name };
@@ -27,13 +23,10 @@ public class AuthService
         }
         return result.Succeeded;
     }
-
     public async Task<bool> LoginAsync(string name, string password)
     {
         var result = await _signInManager.PasswordSignInAsync(name, password, true, false);
         return result.Succeeded;
     }
-
-
 }
 

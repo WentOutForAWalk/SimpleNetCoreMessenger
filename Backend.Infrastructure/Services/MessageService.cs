@@ -1,15 +1,16 @@
 ﻿using Backend.Application.DTO.Message;
 using Backend.Application.DTO.Service;
+using Backend.Application.Interfaces.Services;
 using Backend.Domain.Models;
 using Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Infrastructure.Services;
-public class MessageService
+public class MessageService : IMessageService
 {
     private readonly DataContext _context;
-    private readonly UserContextService _userContext;
-    public MessageService(DataContext context, UserContextService userContext)
+    private readonly IUserContextService _userContext;
+    public MessageService(DataContext context, IUserContextService userContext)
     {
         _context = context;
         _userContext = userContext;
@@ -17,7 +18,13 @@ public class MessageService
 
     public async Task<ServiceDataResult<List<Message>>> GetChannelMessageAsync(Guid id)
     {
-        return ServiceDataResult<List<Message>>.SuccessWithDate(await _context.Messages.Where(m => m.ChannelId == id).ToListAsync());
+        var messagesList = await _context.Messages.Where(m => m.ChannelId == id).ToListAsync();
+        if (messagesList.Count == 0)
+        {
+            return ServiceDataResult<List<Message>>.Failure("Channel not found");
+        }
+        return ServiceDataResult<List<Message>>.SuccessWithDate(messagesList);
+        
     }
     public async Task<ServiceDataResult<Message>> AddMessageAsync(Guid channelId, CreateMessageRequest request)
     {
@@ -53,26 +60,18 @@ public class MessageService
     }
     public async Task<ServiceResult> RemoveMessageAsync(Guid messageId)
     {
+        var message = await _context.Messages
+            .FirstOrDefaultAsync(m => m.MessageId == messageId && m.OwnerId == _userContext.GetUserId());
 
-        var message = new Message
-        {
-            MessageId = messageId,
-            OwnerId = _userContext.GetUserId()
-        };
-
-        _context.Entry(message).State = EntityState.Deleted;
-
-        try
-        {
-            if (await _context.SaveChangesAsync() > 0)
-                return ServiceResult.Success();
-            return ServiceResult.Failure("db save changes error");
-        }
-        catch (DbUpdateConcurrencyException)
+        if (message == null)
         {
             return ServiceResult.Failure("no permission");
         }
 
+        _context.Messages.Remove(message);
+
+        await _context.SaveChangesAsync();
+        return ServiceResult.Success();       
     }
 }
 
